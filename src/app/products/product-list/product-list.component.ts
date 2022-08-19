@@ -1,54 +1,33 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Product } from "../product";
 
-import { Subscription } from 'rxjs';
-
-import { Product } from '../product';
-import { ProductService } from '../product.service';
 
 @Component({
-  selector: 'pm-product-list',
-  templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.css']
+    selector: 'pm-product-list',
+    templateUrl: './product-list.component.html',
+    styleUrls: ['./product-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductListComponent implements OnInit, OnDestroy {
-  pageTitle = 'Products';
-  errorMessage = '';
+export class ProductListComponent {
+    pageTitle = 'Products';
 
-  displayCode = false;
+    @Input() products!: Product[] | null
+    @Input() displayCode!: boolean | null
+    @Input() selectedProduct!: Product | null
+    @Input() errorMessage!: string | null
+    @Output() toggleProdCode = new EventEmitter()
+    @Output() newProduct = new EventEmitter()
+    @Output() productSelected = new EventEmitter<Product>()
 
-  products!: Product[];
+    onToggleProdCode (): void {
+        this.toggleProdCode.emit()
+    }
 
-  // Used to highlight the selected product in the list
-  selectedProduct: Product | null = null;
-  sub!: Subscription;
+    onAddProduct (): void {
+       this.newProduct.emit()
+    }
 
-  constructor(private productService: ProductService) { }
-
-  ngOnInit(): void {
-    this.sub = this.productService.selectedProductChanges$.subscribe(
-      currentProduct => this.selectedProduct = currentProduct
-    );
-
-    this.productService.getProducts().subscribe({
-      next: (products: Product[]) => this.products = products,
-      error: err => this.errorMessage = err
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
-
-  checkChanged(): void {
-    this.displayCode = !this.displayCode;
-  }
-
-  newProduct(): void {
-    this.productService.changeSelectedProduct(this.productService.newProduct());
-  }
-
-  productSelected(product: Product): void {
-    this.productService.changeSelectedProduct(product);
-  }
-
+    onProductSelect (product: Product): void {
+        this.productSelected.emit(product)
+    }
 }

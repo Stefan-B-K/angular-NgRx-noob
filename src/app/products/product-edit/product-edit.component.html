@@ -17,7 +17,6 @@
                    class="form-control"
                    id="productNameId"
                    type="text"
-                   placeholder="Name (required)"
                    formControlName="productName"
                    (blur)="blur()" />
             <span class="invalid-feedback"
@@ -36,7 +35,6 @@
                    class="form-control"
                    id="productCodeId"
                    type="text"
-                   placeholder="Code (required)"
                    formControlName="productCode"
                    (blur)="blur()" />
             <span class="invalid-feedback"
@@ -54,8 +52,7 @@
             <input [ngClass]="{'is-invalid': displayMessage['starRating'] }"
                    class="form-control"
                    id="starRatingId"
-                   type="text"
-                   placeholder="Rating"
+                   type="number"
                    formControlName="starRating" />
             <span class="invalid-feedback"
                   *ngIf="displayMessage['starRating']">
@@ -72,7 +69,6 @@
             <textarea [ngClass]="{'is-invalid': displayMessage['description'] }"
                       class="form-control"
                       id="descriptionId"
-                      placeholder="Description"
                       rows=3
                       formControlName="description">
             </textarea>

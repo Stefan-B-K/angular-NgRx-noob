@@ -1,5 +1,7 @@
 import { FormGroup } from '@angular/forms';
 
+export type DisplayMessage = { [p: string]: string }
+
 // Generic validator for Reactive forms
 // Implemented as a class, not a service, so it can retain state for multiple forms.
 export class GenericValidator {
@@ -14,17 +16,15 @@ export class GenericValidator {
   //     validationRuleName1: 'Validation Message.',
   //     validationRuleName2: 'Validation Message.'
   // }
-  constructor(private validationMessages: { [key: string]: { [key: string]: string } }) {
-
-  }
+  constructor(private validationMessages: { [key: string]: { [key: string]: string } }) {}
 
   // Processes each control within a FormGroup
   // And returns a set of validation messages to display
   // Structure
   // controlName1: 'Validation Message.',
   // controlName2: 'Validation Message.'
-  processMessages(container: FormGroup): { [key: string]: string } {
-    const messages: { [p: string]: string } = {};
+  processMessages(container: FormGroup): DisplayMessage {
+    const messages: DisplayMessage = {};
     for (const controlKey in container.controls) {
       if (container.controls.hasOwnProperty(controlKey)) {
         const c = container.controls[controlKey];
